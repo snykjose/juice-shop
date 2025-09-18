@@ -21,7 +21,7 @@
 #         env:
 #           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-# name: Snyk Demo - CLI Standalone
+# name: Snyk SCA Demo - CLI Standalone
 
 # on:
 #   push:
@@ -41,16 +41,14 @@
 #         uses: actions/setup-node@v3
 #         with:
 #           node-version: '18'
-#       - name: Install Snyk CLI
-#         run: npm install -g snyk
-#       - name: Authenticate Snyk CLI
-#         run: snyk auth ${{ secrets.SNYK_TOKEN }}
-#       - name: Run Snyk Code and Open Source tests
+#       - name: Install Snyk CLI and run SCA test
+#         env:
+#           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 #         run: |
-#           # snyk code test
+#           npm install -g snyk
 #           snyk test
 
-name: Snyk Demo - Hybrid Scan
+name: Snyk SCA Demo - Hybrid Scan
 
 on:
   push:
@@ -64,6 +62,8 @@ on:
 jobs:
   snyk-hybrid-scan:
     runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - name: Setup Node.js
@@ -74,16 +74,7 @@ jobs:
         uses: snyk/actions/node@master
         with:
           args: --sarif-file-output=snyk-oss.sarif
-      - name: Run Snyk Code Test
-        run: |
-          npm install -g snyk
-          snyk auth ${{ secrets.SNYK_TOKEN }}
-          snyk code test --sarif --sarif-file-output=snyk-code.sarif
       - name: Upload Snyk Open Source results to GitHub Code Scanning
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: snyk-oss.sarif
-      - name: Upload Snyk Code results to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: snyk-code.sarif
