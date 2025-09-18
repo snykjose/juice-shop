@@ -1,27 +1,4 @@
-name: Snyk Demo - Quick Start
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
-
-jobs:
-  snyk-quick-start:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run Snyk Open Source test
-        uses: snyk/actions/node@master
-        with:
-          args: --all-projects
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-
-# name: Snyk SCA Demo - CLI Standalone
+# name: Snyk Demo - Quick Start
 
 # on:
 #   push:
@@ -33,20 +10,43 @@ jobs:
 #   workflow_dispatch:
 
 # jobs:
-#   snyk-cli-standalone:
+#   snyk-quick-start:
 #     runs-on: ubuntu-latest
 #     steps:
 #       - uses: actions/checkout@v3
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v3
+#       - name: Run Snyk Open Source test
+#         uses: snyk/actions/node@master
 #         with:
-#           node-version: '18'
-#       - name: Install Snyk CLI and run SCA test
+#           args: --all-projects
 #         env:
 #           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-#         run: |
-#           npm install -g snyk
-#           snyk test --all-projects
+
+name: Snyk SCA Demo - CLI Standalone
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  snyk-cli-standalone:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install Snyk CLI and run SCA test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          npm install -g snyk
+          snyk test --all-projects
 
 # name: Snyk Hybrid - SCA + SAST
 
