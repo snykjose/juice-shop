@@ -1,4 +1,27 @@
-name: Snyk Demo Workflow
+# name: Snyk Demo - Quick Start
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+#   workflow_dispatch:
+
+# jobs:
+#   snyk-quick-start:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Run Snyk Open Source test
+#         uses: snyk/actions/node@master
+#         with:
+#           args: --all-projects
+#         env:
+#           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+name: Snyk Demo - CLI Standalone
 
 on:
   push:
@@ -10,13 +33,57 @@ on:
   workflow_dispatch:
 
 jobs:
-  snyk-quick-start:
+  snyk-cli-standalone:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Run Snyk Open Source test
-        uses: snyk/actions/node@master
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          args: --all-projects
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          node-version: '18'
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+      - name: Authenticate Snyk CLI
+        run: snyk auth ${{ secrets.SNYK_TOKEN }}
+      - name: Run Snyk Code and Open Source tests
+        run: |
+          snyk code test
+          snyk test
+
+# name: Snyk Demo - Hybrid Scan
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+#   workflow_dispatch:
+
+# jobs:
+#   snyk-hybrid-scan:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '18'
+#       - name: Run Snyk Open Source Test
+#         uses: snyk/actions/node@master
+#         with:
+#           args: --sarif-file-output=snyk-oss.sarif
+#       - name: Run Snyk Code Test
+#         run: |
+#           npm install -g snyk
+#           snyk auth ${{ secrets.SNYK_TOKEN }}
+#           snyk code test --sarif --sarif-file-output=snyk-code.sarif
+#       - name: Upload Snyk Open Source results to GitHub Code Scanning
+#         uses: github/codeql-action/upload-sarif@v2
+#         with:
+#           sarif_file: snyk-oss.sarif
+#       - name: Upload Snyk Code results to GitHub Code Scanning
+#         uses: github/codeql-action/upload-sarif@v2
+#         with:
+#           sarif_file: snyk-code.sarif
