@@ -46,7 +46,7 @@
 #           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 #         run: |
 #           npm install -g snyk
-#           snyk test
+#           snyk test --all-projects
 
 name: Snyk SCA Demo - Hybrid Scan
 
@@ -66,15 +66,9 @@ jobs:
       SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - name: Run Snyk Open Source Test
+      - name: Run Snyk Open Source test
         uses: snyk/actions/node@master
-        with:
-          args: --sarif-file-output=snyk-oss.sarif
-      - name: Upload Snyk Open Source results to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: snyk-oss.sarif
+      - name: Run Snyk Open Source monitor
+        run: |
+          npm install -g snyk
+          snyk test --all-projects
