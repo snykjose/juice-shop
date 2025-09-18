@@ -1,25 +1,25 @@
-name: Snyk Demo - Quick Start
+# name: Snyk Demo - Quick Start
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+#   workflow_dispatch:
 
-jobs:
-  snyk-quick-start:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Run Snyk Open Source test
-        uses: snyk/actions/node@master
-        with:
-          args: --all-projects
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+# jobs:
+#   snyk-quick-start:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - name: Run Snyk Open Source test
+#         uses: snyk/actions/node@master
+#         with:
+#           args: --all-projects
+#         env:
+#           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
 # name: Snyk SCA Demo - CLI Standalone
 
@@ -48,37 +48,37 @@ jobs:
 #           npm install -g snyk
 #           snyk test --all-projects
 
-# name: Snyk Hybrid - SCA + SAST
+name: Snyk Hybrid - SCA + SAST
 
-# on:
-#   push:
-#     branches:
-#       - main
-#   pull_request:
-#     branches:
-#       - main
-#   workflow_dispatch:
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
-# jobs:
-#   snyk-hybrid-scan:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - uses: actions/checkout@v3
-#       - name: Run Snyk Open Source test
-#         uses: snyk/actions/node@master
-#         with:
-#           args: --all-projects
-#         env:
-#           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-#         continue-on-error: true
+jobs:
+  snyk-hybrid-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Snyk Open Source test
+        uses: snyk/actions/node@master
+        with:
+          args: --all-projects
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        # continue-on-error: true
 
-#       - name: Setup Node.js
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: '18'
-#       - name: Run Snyk Code SAST test
-#         env:
-#           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-#         run: |
-#           npm install -g snyk
-#           snyk code test
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Run Snyk Code SAST test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          npm install -g snyk
+          snyk code test
